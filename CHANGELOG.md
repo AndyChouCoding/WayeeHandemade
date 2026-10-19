@@ -10,3 +10,4 @@
 - Works page (`/works`): page header, category filter and gallery grid, custom-order call to action
 - Shop page (`/shop`): category filter, product grid and shopping notice
 - Product detail page (`/shop/[id]`) with gallery, specs, quantity stepper and add-to-bag button (visual only)
+- Booking page (`/booking`): service details with anchors, booking form (visual only) and FAQ accordion
