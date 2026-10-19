@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>微雨漫作｜首頁（禪風・晴空）</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&amp;display=swap">
+<style>
+body{margin:0;background:#E3EEF6}
+*{box-sizing:border-box}
+a{color:#1E2833}a:hover{color:#2F4A63}
+.wrap{max-width:1160px;margin-left:auto;margin-right:auto;padding-left:40px;padding-right:40px;width:100%}
+.sec{padding-top:136px;padding-bottom:136px}
+.serif{font-family:'Noto Serif TC',serif}
+.en{font-family:'Cormorant Garamond',serif;font-style:italic;letter-spacing:.06em}
+.idx{font-family:'Cormorant Garamond',serif;font-size:15px;letter-spacing:.24em;color:#4C5D6D}
+.nav-links{display:flex;gap:32px;font-size:14px;letter-spacing:.22em}
+.navlink{text-decoration:none;min-height:44px;display:inline-flex;align-items:center;border-bottom:1px solid transparent}
+.navlink:hover{border-bottom-color:#1E2833}
+.menu-btn{display:none}
+.mobile-only{display:none}
+.ph{background:#F2F8FC;display:flex;align-items:center;justify-content:center;color:#4C5D6D;font-size:12px;letter-spacing:.24em}
+.ph-2{background:#D3E4EF}
+.rain{background-image:radial-gradient(rgba(30,40,51,.16) 1px,transparent 1.6px);background-size:64px 64px;background-position:20px 12px}
+.btn-line{display:inline-flex;align-items:center;justify-content:center;gap:16px;min-height:50px;padding:0 30px;border:1px solid #1E2833;color:#1E2833;text-decoration:none;font-size:14px;letter-spacing:.24em;background:transparent;transition:background .3s,color .3s}
+.btn-line:hover{background:#1E2833;color:#E3EEF6}
+.more{text-decoration:none;font-size:13px;letter-spacing:.24em;min-height:44px;display:inline-flex;align-items:center;gap:12px;border-bottom:1px solid #1E2833}
+.vtitle{writing-mode:vertical-rl;font-size:92px;letter-spacing:.32em;line-height:1}
+.vsub{writing-mode:vertical-rl;font-size:16px;letter-spacing:.5em;line-height:2}
+.hero{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:56px;align-items:end}
+.g-works{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:48px 40px}
+.g-works .tall{grid-row:span 2}
+.g-shop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:40px 28px}
+.split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:80px}
+.row{display:grid;grid-template-columns:140px minmax(0,1fr) 120px;gap:24px;align-items:baseline;padding:28px 0;border-top:1px solid #B9CEDE;text-decoration:none}
+.row:hover .rt{color:#2F4A63}
+.foot{display:grid;grid-template-columns:minmax(0,2fr) repeat(2,minmax(0,1fr)) minmax(0,2fr);gap:48px}
+@media (max-width:1000px){
+.g-shop{grid-template-columns:repeat(2,minmax(0,1fr))}
+.split{grid-template-columns:minmax(0,1fr);gap:40px}
+.foot{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+.wrap{padding-left:22px;padding-right:22px}
+.sec{padding-top:88px;padding-bottom:88px}
+.nav-links{display:none}
+.menu-btn{display:inline-flex}
+.mobile-only{display:flex}
+.hero{grid-template-columns:auto auto;gap:24px}
+.hero .hero-img{grid-column:1 / -1}
+.vtitle{font-size:56px}
+.vsub{font-size:14px}
+.g-works{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 16px}
+.g-works .tall{grid-row:auto}
+.g-shop{gap:28px 16px}
+.row{grid-template-columns:minmax(0,1fr);gap:6px;padding:22px 0}
+.foot{grid-template-columns:minmax(0,1fr);gap:36px}
+}
+</style>
+</helmet>
+<div style="font-family: 'Noto Sans TC',system-ui,sans-serif; font-weight: 300; color: #1E2833; background: #E3EEF6; min-height: 100vh; display: flex; flex-direction: column">
+
+<header style="position: sticky; top: 0; z-index: 20; background: rgba(227,238,246,0.95); border-bottom: 1px solid #B9CEDE">
+<nav aria-label="主選單" class="wrap" style="padding-top: 18px; padding-bottom: 18px; display: flex; align-items: center; gap: 32px">
+<a href="SkyMain.dc.html" style="display: flex; align-items: center; gap: 14px; text-decoration: none; margin-right: auto">
+<img src="./assets/c25897d8816bba782d70baf90d4c2e2a.jpg" alt="微雨漫作 logo" style="width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 1px solid #B9CEDE; flex-shrink: 0">
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span class="serif" style="font-size: 19px; font-weight: 600; letter-spacing: 0.32em">微雨漫作</span>
+<span class="en" style="font-size: 13px; color: #4C5D6D">wayee handmade</span>
+</span>
+</a>
+<div class="nav-links">
+<a class="navlink" href="SkyWorks.dc.html">作品</a>
+<a class="navlink" href="SkyShop.dc.html">器物</a>
+<a class="navlink" href="SkyBooking.dc.html">預約</a>
+<a class="navlink" href="SkyJournal.dc.html">日誌</a>
+</div>
+<a href="SkyShop.dc.html" style="text-decoration: none; font-size: 13px; letter-spacing: 0.2em; min-height: 44px; display: inline-flex; align-items: center">購物袋（0）</a>
+<button type="button" class="menu-btn" onClick="{{toggleMenu}}" aria-label="開啟選單" aria-expanded="{{menuExpanded}}" style="width: 44px; height: 44px; border: 0; background: transparent; align-items: center; justify-content: center; color: #1E2833; cursor: pointer">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 9h16M4 15h16"></path></svg>
+</button>
+</nav>
+<sc-if value="{{menuOpen}}" hint-placeholder-val="{{ false }}">
+<div class="mobile-only wrap" style="flex-direction: column; padding-bottom: 20px; font-size: 16px; letter-spacing: 0.24em">
+<a class="navlink" href="SkyMain.dc.html" style="border-top: 1px solid #B9CEDE; min-height: 56px">首頁</a>
+<a class="navlink" href="SkyWorks.dc.html" style="border-top: 1px solid #B9CEDE; min-height: 56px">作品</a>
+<a class="navlink" href="SkyShop.dc.html" style="border-top: 1px solid #B9CEDE; min-height: 56px">器物</a>
+<a class="navlink" href="SkyBooking.dc.html" style="border-top: 1px solid #B9CEDE; min-height: 56px">預約</a>
+<a class="navlink" href="SkyJournal.dc.html" style="border-top: 1px solid #B9CEDE; min-height: 56px">日誌</a>
+</div>
+</sc-if>
+</header>
+
+<main style="flex: 1 0 auto">
+<!-- Hero -->
+<section class="rain">
+<div class="wrap" style="padding-top: 96px; padding-bottom: 120px">
+<div class="hero">
+<h1 class="vtitle serif" style="margin: 0; font-weight: 400">微雨漫作</h1>
+<p class="vsub serif" style="margin: 0; color: #3B4856">雨落時，<br>慢慢作。</p>
+<div class="hero-img" style="display: flex; flex-direction: column; gap: 20px">
+<img src="./assets/78fa84dc759e96ab7c7b936888aca510.jpg" alt="微雨漫作 雲朵與星星" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap">
+<span class="en" style="font-size: 18px; color: #4C5D6D">wayee handmade — studio &amp; shop</span>
+<a class="more" href="SkyBooking.dc.html">預約手作時光 <span aria-hidden="true">—</span></a>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 01 About -->
+<section class="wrap sec">
+<div class="split">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<span class="idx">01 — ABOUT</span>
+<h2 class="serif" style="margin: 0; font-size: 34px; font-weight: 400; line-height: 1.7; letter-spacing: 0.12em">在細雨裡，<br>做一件安靜的東西。</h2>
+</div>
+<div style="display: flex; flex-direction: column; gap: 22px; font-size: 16px; line-height: 2.2; color: #34414F; padding-top: 44px">
+<p style="margin: 0">[關於我：你是誰、怎麼開始手作、「微雨漫作」名字的由來]</p>
+<p style="margin: 0">[工作室的材料、做法，以及想帶給大家的感覺]</p>
+<a class="more" href="SkyWorks.dc.html" style="align-self: flex-start; margin-top: 8px">看看作品 <span aria-hidden="true">—</span></a>
+</div>
+</div>
+</section>
+
+<!-- 02 Works -->
+<section style="border-top: 1px solid #B9CEDE">
+<div class="wrap sec" style="display: flex; flex-direction: column; gap: 56px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span class="idx">02 — WORKS</span>
+<h2 class="serif" style="margin: 0; font-size: 34px; font-weight: 400; letter-spacing: 0.16em">作品</h2>
+</div>
+<a class="more" href="SkyWorks.dc.html">全部作品 <span aria-hidden="true">—</span></a>
+</div>
+<div class="g-works">
+<a class="tall" href="SkyWorks.dc.html" style="text-decoration: none; display: flex; flex-direction: column; gap: 14px">
+<div class="ph" style="flex: 1; min-height: 360px">作品照片</div>
+<span style="font-size: 14px; letter-spacing: 0.16em">[作品名稱 一]</span>
+</a>
+<a href="SkyWorks.dc.html" style="text-decoration: none; display: flex; flex-direction: column; gap: 14px">
+<div class="ph ph-2" style="aspect-ratio: 4 / 3">作品照片</div>
+<span style="font-size: 14px; letter-spacing: 0.16em">[作品名稱 二]</span>
+</a>
+<a href="SkyWorks.dc.html" style="text-decoration: none; display: flex; flex-direction: column; gap: 14px">
+<div class="ph" style="aspect-ratio: 4 / 3">作品照片</div>
+<span style="font-size: 14px; letter-spacing: 0.16em">[作品名稱 三]</span>
+</a>
+<a href="SkyWorks.dc.html" style="text-decoration: none; display: flex; flex-direction: column; gap: 14px">
+<div class="ph" style="aspect-ratio: 4 / 3">作品照片</div>
+<span style="font-size: 14px; letter-spacing: 0.16em">[作品名稱 四]</span>
+</a>
+<a href="SkyWorks.dc.html" style="text-decoration: none; display: flex; flex-direction: column; gap: 14px">
+<div class="ph ph-2" style="aspect-ratio: 4 / 3">作品照片</div>
+<span style="font-size: 14px; letter-spacing: 0.16em">[作品名稱 五]</span>
+</a>
+</div>
+</div>
+</section>
+
+<!-- 03 Shop -->
+<section style="border-top: 1px solid #B9CEDE">
+<div class="wrap sec" style="display: flex; flex-direction: column; gap: 56px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span class="idx">03 — SHOP</span>
+<h2 class="serif" style="margin: 0; font-size: 34px; font-weight: 400; letter-spacing: 0.16em">器物</h2>
+</div>
+<a class="more" href="SkyShop.dc.html">進入小舖 <span aria-hidden="true">—</span></a>
+</div>
+<div class="g-shop">
+<sc-for list="{{products}}" as="p" hint-placeholder-count="4">
+<a href="SkyShop.dc.html" style="text-decoration: none; display: flex; flex-direction: column; gap: 14px">
+<div class="{{p.cls}}" style="aspect-ratio: 1 / 1">商品照片</div>
+<div style="display: flex; justify-content: space-between; gap: 10px; font-size: 14px; letter-spacing: 0.1em">
+<span>{{p.name}}</span><span style="color: #4C5D6D">NT$ [價格]</span>
+</div>
+</a>
+</sc-for>
+</div>
+</div>
+</section>
+
+<!-- 04 Booking -->
+<section style="background: #EEF6FB; border-top: 1px solid #B9CEDE; border-bottom: 1px solid #B9CEDE">
+<div class="wrap sec">
+<div class="split">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<span class="idx">04 — BOOKING</span>
+<h2 class="serif" style="margin: 0; font-size: 34px; font-weight: 400; line-height: 1.7; letter-spacing: 0.12em">留一段時間，<br>給雙手。</h2>
+</div>
+<div style="display: flex; flex-direction: column">
+<a class="row" href="SkyBooking.dc.html" style="grid-template-columns: minmax(0,1fr) auto">
+<span style="display: flex; flex-direction: column; gap: 8px"><span class="serif rt" style="font-size: 22px; letter-spacing: 0.14em">手作體驗課</span><span style="font-size: 14px; color: #4C5D6D; line-height: 1.9">[課程內容・時長・人數・費用]</span></span>
+<span aria-hidden="true" style="font-size: 20px">→</span>
+</a>
+<a class="row" href="SkyBooking.dc.html" style="grid-template-columns: minmax(0,1fr) auto">
+<span style="display: flex; flex-direction: column; gap: 8px"><span class="serif rt" style="font-size: 22px; letter-spacing: 0.14em">客製化諮詢</span><span style="font-size: 14px; color: #4C5D6D; line-height: 1.9">[可客製品項・製作期・報價方式]</span></span>
+<span aria-hidden="true" style="font-size: 20px">→</span>
+</a>
+<a class="row" href="SkyBooking.dc.html" style="grid-template-columns: minmax(0,1fr) auto; border-bottom: 1px solid #B9CEDE">
+<span style="display: flex; flex-direction: column; gap: 8px"><span class="serif rt" style="font-size: 22px; letter-spacing: 0.14em">包場・團體</span><span style="font-size: 14px; color: #4C5D6D; line-height: 1.9">[人數與時間另議]</span></span>
+<span aria-hidden="true" style="font-size: 20px">→</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 05 Journal -->
+<section class="wrap sec" style="display: flex; flex-direction: column; gap: 48px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span class="idx">05 — JOURNAL</span>
+<h2 class="serif" style="margin: 0; font-size: 34px; font-weight: 400; letter-spacing: 0.16em">日誌</h2>
+</div>
+<a class="more" href="SkyJournal.dc.html">所有文章 <span aria-hidden="true">—</span></a>
+</div>
+<div style="display: flex; flex-direction: column; border-bottom: 1px solid #B9CEDE">
+<sc-for list="{{posts}}" as="post" hint-placeholder-count="3">
+<a class="row" href="SkyJournal.dc.html">
+<span class="en" style="font-size: 16px; color: #4C5D6D">[2026.10.—]</span>
+<span class="serif rt" style="font-size: 19px; letter-spacing: 0.1em">{{post.title}}</span>
+<span style="font-size: 13px; letter-spacing: 0.2em; color: #4C5D6D">{{post.tag}}</span>
+</a>
+</sc-for>
+</div>
+</section>
+</main>
+
+<footer style="border-top: 1px solid #1E2833">
+<div class="wrap" style="padding-top: 80px; padding-bottom: 36px; display: flex; flex-direction: column; gap: 64px">
+<div class="foot">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<span style="display: flex; align-items: center; gap: 14px"><img src="./assets/c25897d8816bba782d70baf90d4c2e2a.jpg" alt="" style="width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 1px solid #B9CEDE"><span class="serif" style="font-size: 24px; letter-spacing: 0.32em">微雨漫作</span></span>
+<span class="en" style="font-size: 15px; color: #4C5D6D">wayee handmade</span>
+<p style="margin: 0; font-size: 14px; line-height: 2; color: #34414F">[工作室地址，或「線上工作室」]<br>營業時間：[時間]</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; letter-spacing: 0.16em">
+<span class="idx" style="margin-bottom: 8px">MENU</span>
+<a href="SkyWorks.dc.html" style="text-decoration: none; min-height: 34px; display: flex; align-items: center">作品</a>
+<a href="SkyShop.dc.html" style="text-decoration: none; min-height: 34px; display: flex; align-items: center">器物</a>
+<a href="SkyBooking.dc.html" style="text-decoration: none; min-height: 34px; display: flex; align-items: center">預約</a>
+<a href="SkyJournal.dc.html" style="text-decoration: none; min-height: 34px; display: flex; align-items: center">日誌</a>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; letter-spacing: 0.1em">
+<span class="idx" style="margin-bottom: 8px">CONTACT</span>
+<a href="#" style="text-decoration: none; min-height: 34px; display: flex; align-items: center">Instagram</a>
+<a href="#" style="text-decoration: none; min-height: 34px; display: flex; align-items: center">Email</a>
+<span style="min-height: 34px; display: flex; align-items: center; color: #4C5D6D">[@帳號]</span>
+</div>
+<form style="display: flex; flex-direction: column; gap: 14px">
+<label for="znl" class="idx">NEWSLETTER</label>
+<span style="font-size: 14px; line-height: 1.9; color: #34414F">新作與課程消息，偶爾寄一封。</span>
+<div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #1E2833">
+<input id="znl" type="email" placeholder="email" style="flex: 1; min-width: 0; min-height: 46px; border: 0; background: transparent; font: inherit; font-size: 15px; color: #1E2833; outline-offset: 4px">
+<button type="button" style="min-height: 46px; border: 0; background: transparent; font: inherit; font-size: 14px; letter-spacing: 0.2em; cursor: pointer; color: #1E2833">訂閱 →</button>
+</div>
+</form>
+</div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; font-size: 12px; letter-spacing: 0.16em; color: #4C5D6D; border-top: 1px solid #B9CEDE; padding-top: 24px">
+<span>© 2026 微雨漫作 wayee handmade</span>
+<span style="display: flex; flex-wrap: wrap; gap: 6px 24px"><a href="#" style="color: #4C5D6D">常見問題</a><a href="#" style="color: #4C5D6D">退換貨說明</a><a href="#" style="color: #4C5D6D">隱私權政策</a></span>
+</div>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":4900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { menu: false }; }
+  renderVals() {
+    return {
+      accent: this.props.accent ?? '#2F4A63',
+      menuOpen: this.state.menu,
+      menuExpanded: this.state.menu ? 'true' : 'false',
+      toggleMenu: () => this.setState({ menu: !this.state.menu }),
+      products: ['一', '二', '三', '四'].map((n, i) => ({ name: '[器物 ' + n + ']', cls: i % 2 ? 'ph ph-2' : 'ph' })),
+      posts: [
+        { title: '[文章標題：雨天的工作桌]', tag: '日常' },
+        { title: '[文章標題：一件作品的誕生]', tag: '作品' },
+        { title: '[文章標題：市集與課程消息]', tag: '公告' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
