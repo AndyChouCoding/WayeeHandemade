@@ -7,20 +7,21 @@ export default function LineButton({ sx, ...props }: ButtonProps) {
       variant="outlined"
       {...props}
       sx={[
-        (theme) => ({
-          gap: '16px',
+        {
+          gap: 2,
           minHeight: 50,
           px: '30px',
           borderRadius: 0,
-          border: `1px solid ${theme.palette.sky.ink}`,
-          color: theme.palette.sky.ink,
+          border: '1px solid',
+          borderColor: 'sky.ink',
+          color: 'sky.ink',
           fontSize: 14,
           fontWeight: 300,
           letterSpacing: '.24em',
           bgcolor: 'transparent',
           transition: 'background .3s, color .3s',
-          '&:hover': { bgcolor: theme.palette.sky.ink, color: theme.palette.sky.bg, borderColor: theme.palette.sky.ink },
-        }),
+          '&:hover': { bgcolor: 'sky.ink', color: 'sky.bg', borderColor: 'sky.ink' },
+        },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     />

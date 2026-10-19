@@ -7,3 +7,4 @@
 - Shared layout: sticky header with mobile menu, footer with newsletter form (visual only)
 - Home page: hero with vertical title, about, works, shop, booking and journal sections
 - Shared content data (`src/data`) with placeholder copy for works, products, services and posts
+- Works page (`/works`): page header, category filter and gallery grid, custom-order call to action
