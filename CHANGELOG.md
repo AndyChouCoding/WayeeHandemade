@@ -13,3 +13,4 @@
 - Booking page (`/booking`): service details with anchors, booking form (visual only) and FAQ accordion
 - Journal page (`/journal`): featured post, tag filter and post list
 - Post page (`/journal/[slug]`) with article layout and newer/older navigation
+- README with setup, structure and content-editing guide
