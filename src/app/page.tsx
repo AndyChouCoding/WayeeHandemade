@@ -71,7 +71,7 @@ export default function HomePage() {
             }}
           >
             {products.slice(0, 4).map((p) => (
-              <ProductCard key={p.id} product={p} />
+              <ProductCard key={p.id} product={p} href={`/shop/${p.id}`} />
             ))}
           </Box>
         </Wrap>
