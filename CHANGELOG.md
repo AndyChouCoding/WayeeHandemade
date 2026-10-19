@@ -11,3 +11,5 @@
 - Shop page (`/shop`): category filter, product grid and shopping notice
 - Product detail page (`/shop/[id]`) with gallery, specs, quantity stepper and add-to-bag button (visual only)
 - Booking page (`/booking`): service details with anchors, booking form (visual only) and FAQ accordion
+- Journal page (`/journal`): featured post, tag filter and post list
+- Post page (`/journal/[slug]`) with article layout and newer/older navigation
