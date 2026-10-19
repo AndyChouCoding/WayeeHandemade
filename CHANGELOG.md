@@ -8,3 +8,5 @@
 - Home page: hero with vertical title, about, works, shop, booking and journal sections
 - Shared content data (`src/data`) with placeholder copy for works, products, services and posts
 - Works page (`/works`): page header, category filter and gallery grid, custom-order call to action
+- Shop page (`/shop`): category filter, product grid and shopping notice
+- Product detail page (`/shop/[id]`) with gallery, specs, quantity stepper and add-to-bag button (visual only)
