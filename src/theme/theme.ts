@@ -94,7 +94,7 @@ const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
-        body: { backgroundColor: sky.bg, color: sky.ink, fontWeight: 300 },
+        body: { backgroundColor: sky.bg, color: sky.ink, fontWeight: 300, lineHeight: 'normal', letterSpacing: 'normal' },
         a: { color: sky.ink },
         'a:hover': { color: sky.accent },
       },

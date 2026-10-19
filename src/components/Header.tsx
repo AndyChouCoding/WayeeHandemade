@@ -29,7 +29,7 @@ export default function Header() {
       component="header"
       sx={{ position: 'sticky', top: 0, zIndex: 20, bgcolor: 'rgba(227,238,246,0.95)', borderBottom: 1, borderColor: 'sky.line' }}
     >
-      <Wrap component="nav" aria-label="主選單" sx={{ py: '18px', display: 'flex', alignItems: 'center', gap: '32px' }}>
+      <Wrap component="nav" aria-label="主選單" sx={{ py: '18px', display: 'flex', alignItems: 'center', gap: { xs: '16px', sm: '32px' } }}>
         <Link href="/" sx={{ display: 'flex', alignItems: 'center', gap: '14px', mr: 'auto' }}>
           <Box
             component={Image}
@@ -41,7 +41,7 @@ export default function Header() {
             sx={{ borderRadius: '50%', objectFit: 'cover', border: 1, borderColor: 'sky.line', flexShrink: 0 }}
           />
           <Box component="span" sx={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            <Box component="span" sx={{ fontFamily: fonts.serif, fontSize: 19, fontWeight: 600, letterSpacing: '.32em' }}>
+            <Box component="span" sx={{ fontFamily: fonts.serif, fontSize: 19, fontWeight: 600, letterSpacing: '.32em', whiteSpace: 'nowrap' }}>
               {site.name}
             </Box>
             <Box component="span" sx={{ typography: 'en', fontSize: 13, color: 'sky.muted' }}>
@@ -76,7 +76,7 @@ export default function Header() {
           onClick={() => setMenu((v) => !v)}
           aria-label={menu ? '關閉選單' : '開啟選單'}
           aria-expanded={menu}
-          sx={{ display: { xs: 'inline-flex', sm: 'none' }, width: 44, height: 44, color: 'sky.ink', borderRadius: 0 }}
+          sx={{ display: { xs: 'inline-flex', sm: 'none' }, width: 44, height: 44, color: 'sky.ink', borderRadius: 0, '&:hover': { bgcolor: 'transparent' } }}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
             <path d={menu ? 'M6 6l12 12M18 6L6 18' : 'M4 9h16M4 15h16'} />
