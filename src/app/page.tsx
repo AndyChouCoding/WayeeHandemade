@@ -6,13 +6,12 @@ import MoreLink from '@/components/MoreLink';
 import PostRow from '@/components/PostRow';
 import ProductCard from '@/components/ProductCard';
 import SectionHeading from '@/components/SectionHeading';
-import ServiceRow from '@/components/ServiceRow';
+import ServiceCatalog from '@/components/booking/ServiceCatalog';
 import Split from '@/components/Split';
 import WorkCard from '@/components/WorkCard';
 import Wrap, { secPadding } from '@/components/Wrap';
 import { posts } from '@/data/posts';
 import { products } from '@/data/products';
-import { services } from '@/data/services';
 import { works } from '@/data/works';
 
 const sectionStack = { ...secPadding, display: 'flex', flexDirection: 'column' } as const;
@@ -90,9 +89,7 @@ export default function HomePage() {
               </Typography>
             </Stack>
             <Stack>
-              {services.map((s, i) => (
-                <ServiceRow key={s.id} service={s} last={i === services.length - 1} />
-              ))}
+              <ServiceCatalog />
             </Stack>
           </Split>
         </Wrap>

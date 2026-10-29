@@ -1,0 +1,47 @@
+import { expect, test } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+
+const fixturePath = process.env.E2E_LIVE_FIXTURE;
+const fixture = fixturePath ? JSON.parse(readFileSync(fixturePath, 'utf8')) as { date: string; serviceId: string; staffId: string } : undefined;
+
+test('real API: mobile catalog, actual conflict, booking, token lookup and cancellation', async ({ page, request }) => {
+  test.skip(!fixture, 'Use scripts/prepare-live.mjs and E2E_LIVE_FIXTURE with the isolated API stack.');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  await expect(page.getByRole('link', { name: /羊毛氈體驗（驗收）/ })).toBeVisible();
+  await page.goto('/booking');
+  await page.getByRole('textbox', { name: '姓名', exact: true }).fill('網站驗收客人');
+  await page.getByRole('textbox', { name: 'Email', exact: true }).fill(`guest-${Date.now()}@example.test`);
+  await page.getByRole('spinbutton', { name: '需求人數', exact: true }).fill('2');
+  await page.getByLabel(/^預約日期/).fill(fixture!.date);
+  const times = page.getByRole('combobox', { name: '可預約時段' });
+  await expect(times).toBeEnabled();
+  await times.selectOption({ index: 1 });
+  const selected = await times.inputValue();
+  const [start, staffId] = selected.split('|');
+  const competitor = await request.post('/api/booking/bookings', { data: { serviceId: fixture!.serviceId, staffId, start, customer: { name: '另一位驗收客人', email: `other-${Date.now()}@example.test` } } });
+  expect(competitor.status()).toBe(201);
+  const competitorData = await competitor.json();
+  await page.getByRole('button', { name: '送出預約', exact: true }).click();
+  await expect(page.getByText('這個時段剛被預約，請重新選擇可預約時段。')).toBeVisible();
+  await expect(times.locator(`option[value="${selected}"]`)).toHaveCount(0);
+  await times.selectOption({ index: 1 });
+  await page.getByRole('button', { name: '送出預約', exact: true }).click();
+  const code = page.getByRole('textbox', { name: '預約管理碼', exact: true });
+  await expect(code).toBeVisible();
+  const token = await code.inputValue();
+  expect(token).toHaveLength(43);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+  await page.getByRole('link', { name: '查詢或取消預約', exact: true }).last().click();
+  await page.getByRole('textbox', { name: '預約管理碼', exact: true }).fill(token);
+  await page.getByRole('button', { name: '查詢預約', exact: true }).click();
+  await expect(page.getByText('預約狀態：已確認', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '取消預約', exact: true }).click();
+  await page.getByLabel('取消原因（選填）').fill('API 驗收完成');
+  await page.getByRole('button', { name: '確定取消', exact: true }).click();
+  await expect(page.getByText('預約狀態：已取消', { exact: true })).toBeVisible();
+  const cancelOther = await request.post('/api/booking/manage/cancel', { data: { token: competitorData.manageToken, reason: 'API 驗收完成' } });
+  expect(cancelOther.status()).toBe(200);
+  expect(page.url()).not.toContain(token);
+  expect(await page.evaluate(() => [localStorage.length, sessionStorage.length])).toEqual([0, 0]);
+});
