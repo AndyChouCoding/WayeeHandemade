@@ -1,8 +1,10 @@
 import { randomBytes } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
+const credentialsFile = process.env.STUDIO_TEST_CREDENTIALS_FILE;
+if (credentialsFile && (!/^\.env[\w.-]*\.local$/.test(path.basename(credentialsFile)) || existsSync(credentialsFile))) throw new Error('Use a new ignored .env*.local credentials filename; existing files are never overwritten.');
 const project = process.env.STUDIO_TEST_COMPOSE_PROJECT;
 const repo = process.env.STUDIO_TEST_REPO;
 const apiUrl = process.env.STUDIO_TEST_API_URL ?? 'http://127.0.0.1:3000';
@@ -27,9 +29,10 @@ async function api(endpoint, method = 'GET', body, token) {
 const admin = await api('/auth/login', 'POST', { email, password });
 const slug = `wayee-e2e-${suffix}`;
 const ownerEmail = `owner-${suffix}@example.test`;
-const tenant = await api('/platform/tenants', 'POST', { slug, name: '微雨 API 驗收（測試資料）', owner: { email: ownerEmail, name: 'Test Owner', password } }, admin.accessToken);
+const ownerPassword = randomBytes(24).toString('hex');
+const tenant = await api('/platform/tenants', 'POST', { slug, name: '微雨 API 驗收（測試資料）', owner: { email: ownerEmail, name: 'Test Owner', password: ownerPassword } }, admin.accessToken);
 await api(`/platform/tenants/${tenant.id}/features/booking`, 'PUT', { enabled: true, reason: 'Wayee frontend acceptance' }, admin.accessToken);
-const owner = await api('/auth/login', 'POST', { email: ownerEmail, password });
+const owner = await api('/auth/login', 'POST', { email: ownerEmail, password: ownerPassword });
 await api('/tenant/settings', 'PATCH', { timezone: 'Asia/Taipei', minLeadMinutes: 0, maxAdvanceDays: 30, cancelCutoffMinutes: 60, requireConfirmation: false, bookingNotificationsEnabled: false }, owner.accessToken);
 const service = await api('/services', 'POST', { name: '羊毛氈體驗（驗收）', description: '僅供網站 API 串接驗收，非正式課程', durationMin: 60, priceAmount: 800 }, owner.accessToken);
 const teacher = await api('/staff', 'POST', { displayName: '測試老師', serviceIds: [service.id] }, owner.accessToken);
@@ -37,6 +40,12 @@ await api(`/staff/${teacher.id}/working-hours`, 'PUT', { hours: Array.from({ len
 const date = new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10);
 const file = path.resolve('docs/live-fixture.local.json');
 mkdirSync(path.dirname(file), { recursive: true });
-// Only public fixture metadata is persisted; admin credentials and tokens stay in memory.
+// Public fixture metadata has no secrets. Optional owner credentials are for local manual acceptance only.
 writeFileSync(file, JSON.stringify({ slug, apiUrl, date, serviceId: service.id, staffId: teacher.id }, null, 2));
 console.log(`Created isolated test tenant ${slug}. Fixture: ${file}`);
+
+if (credentialsFile) {
+  // Never persist platform credentials or access tokens; refuse to overwrite an existing file.
+  writeFileSync(credentialsFile, `E2E_OWNER_EMAIL=${ownerEmail}\nE2E_OWNER_PASSWORD=${ownerPassword}\n`, { mode: 0o600, flag: 'wx' });
+  console.log('Owner credentials saved to the requested local file (contents not logged).');
+}

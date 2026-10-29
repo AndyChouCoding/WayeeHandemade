@@ -115,6 +115,7 @@ export default function Footer() {
             <a href="#">常見問題</a>
             <a href="#">退換貨說明</a>
             <a href="#">隱私權政策</a>
+            <a href="/admin">商家後台</a>
           </Box>
         </Box>
       </Wrap>

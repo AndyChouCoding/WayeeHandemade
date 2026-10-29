@@ -1,0 +1,55 @@
+import { expect, test } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+import { parseEnv } from 'node:util';
+
+const fixturePath = process.env.E2E_LIVE_FIXTURE;
+const credentialsPath = process.env.E2E_ADMIN_CREDENTIALS;
+const fixture = fixturePath ? JSON.parse(readFileSync(fixturePath, 'utf8')) as { date: string } : undefined;
+const credentials = credentialsPath ? parseEnv(readFileSync(credentialsPath, 'utf8')) : undefined;
+
+test('same-origin storefront and admin share booking data; login, refresh, cancel and logout work', async ({ page, context }) => {
+  test.skip(!fixture || !credentials?.E2E_OWNER_EMAIL || !credentials?.E2E_OWNER_PASSWORD, 'Provide isolated fixture and ignored local admin credentials.');
+  const customer = `整體驗收-${Date.now()}`;
+  await page.goto('/booking');
+  await page.getByRole('textbox', { name: '姓名', exact: true }).fill(customer);
+  await page.getByRole('textbox', { name: 'Email', exact: true }).fill(`full-${Date.now()}@example.test`);
+  await page.getByLabel(/^預約日期/).fill(fixture!.date);
+  const times = page.getByRole('combobox', { name: '可預約時段' });
+  await expect(times).toBeEnabled();
+  await times.selectOption({ index: 1 });
+  await page.getByRole('button', { name: '送出預約', exact: true }).click();
+  const code = page.getByRole('textbox', { name: '預約管理碼', exact: true });
+  await expect(code).toBeVisible();
+  const token = await code.inputValue();
+
+  await page.getByRole('link', { name: '商家後台', exact: true }).click();
+  await expect(page).toHaveURL(/\/admin$/);
+  await page.getByRole('textbox', { name: 'Email', exact: true }).fill(credentials!.E2E_OWNER_EMAIL!);
+  await page.getByRole('textbox', { name: '密碼', exact: true }).fill(credentials!.E2E_OWNER_PASSWORD!);
+  await page.getByRole('button', { name: '登入', exact: true }).click();
+  await expect(page.getByRole('button', { name: '登出', exact: true })).toBeVisible();
+  const cookie = (await context.cookies()).find((c) => c.name === 'studio_rt_web');
+  expect(Boolean(cookie?.httpOnly && cookie.sameSite === 'Strict')).toBeTruthy();
+  await page.reload();
+  await expect(page.getByRole('button', { name: '登出', exact: true })).toBeVisible();
+  await page.getByRole('link', { name: '預約', exact: true }).click();
+  await expect(page).toHaveURL(/\/admin#\/calendar$/);
+  await page.getByLabel('日期', { exact: true }).fill(fixture!.date);
+  await page.getByRole('button', { name: new RegExp(customer) }).click();
+  await page.getByRole('button', { name: '取消預約', exact: true }).click();
+  await page.getByRole('dialog', { name: '確定要取消預約？' }).getByRole('button', { name: '取消預約', exact: true }).click();
+  await expect(page.getByRole('dialog').getByText('已取消', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '關閉詳情' }).click();
+  await page.getByRole('link', { name: '返回網站' }).click();
+  await expect(page).toHaveURL('http://127.0.0.1:3001/');
+  await page.goto('/booking/manage');
+  await page.getByRole('textbox', { name: '預約管理碼', exact: true }).fill(token);
+  await page.getByRole('button', { name: '查詢預約' }).click();
+  await expect(page.getByText('預約狀態：已取消', { exact: true })).toBeVisible();
+  await page.goto('/admin');
+  await expect(page.getByRole('button', { name: '登出', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '登出', exact: true }).click();
+  await expect(page.getByRole('button', { name: '登入', exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('button', { name: '登入', exact: true })).toBeVisible();
+});

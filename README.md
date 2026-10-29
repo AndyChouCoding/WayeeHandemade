@@ -12,6 +12,7 @@
 | `/shop/[id]` | 商品頁：圖片、規格、數量與加入購物袋 |
 | `/booking` | 預約：API 服務資料、老師、可預約時段、建立預約、常見問題 |
 | `/booking/manage` | 憑管理碼查詢與取消預約 |
+| `/admin` | 同源商家後台入口；預約管理為 `/admin#/calendar` |
 | `/journal` | 日誌：精選文章、標籤篩選、文章列表 |
 | `/journal/[slug]` | 文章頁 |
 
@@ -72,9 +73,10 @@ docs/               # 原始設計稿（參考用）
 ```dotenv
 STUDIO_API_URL=http://127.0.0.1:3000
 STUDIO_TENANT_SLUG=wayee
+STUDIO_ADMIN_URL=http://127.0.0.1:8080
 ```
 
-這兩項只在伺服器讀取；部署時也需設定，變更後重啟網站。經 AndyStudio nginx 可用 `http://127.0.0.1:8080/api`。正式環境請設定實際可達的 API 網址與商家 slug；容器內的 localhost 指向該容器自身。不得放入管理員 token 或使用 `NEXT_PUBLIC_` 暴露設定。需要 Next.js Node.js server，不能僅匯出靜態檔案部署。
+這些設定只在伺服器讀取；部署時也需設定。STUDIO_ADMIN_URL 用於 rewrites，變更後需要重新 build／重啟網站。經 AndyStudio nginx 可用 `http://127.0.0.1:8080/api`。正式環境請設定實際可達的 API 網址與商家 slug；容器內的 localhost 指向該容器自身。不得放入管理員 token 或使用 `NEXT_PUBLIC_` 暴露設定。需要 Next.js Node.js server，不能僅匯出靜態檔案部署。
 
 先確認 `GET {STUDIO_API_URL}/public/{STUDIO_TENANT_SLUG}` 回應成功。商家須啟用 booking 功能、至少一個啟用服務與提供該服務的老師，並設定老師工作時段。404 可能代表商家不存在、停用或未啟用 booking；空時段也可能是排班、休假、提前時間或衝突造成。
 
@@ -98,7 +100,7 @@ STUDIO_TENANT_SLUG=wayee
 
 ## 真實 API 驗收
 
-使用已啟動的獨立 `studio_e2e_*` Compose 測試環境，不連正式環境。準備程序會驗證容器與 API port 一致，再新增隨機命名測試商家、課程、老師與排班；原有商家不變。測試帳號使用 `example.test`，憑證只在準備程序記憶體中。
+使用已啟動的獨立 `studio_e2e_*` Compose 測試環境，不連正式環境。準備程序會驗證容器與 API port 一致，再新增隨機命名測試商家、課程、老師與排班；原有商家不變。測試帳號使用 `example.test`，預設憑證只在準備程序記憶體中；若需手動驗收，可依下節將 owner 帳密保存至 ignored 本機設定檔，platform 帳密與 token 不會保存。
 
 ```bash
 STUDIO_TEST_REPO=/path/to/AndyStudio \
@@ -114,3 +116,32 @@ Playwright 自行啟動 3001 網站，透過程序環境指向測試商家，不
 ## 回復方式
 
 合併前可直接保留本分支供審查；合併後如需回復，由使用者核准後以 revert 還原此次功能提交。此變更沒有資料庫 migration；`.env.local` 是本機設定，不在 Git revert 範圍。回復網站程式不會刪除已建立的後端預約。
+
+## 同源前台／商家後台
+
+- 前台：`http://127.0.0.1:3001/`；頁尾「商家後台」連到 `/admin`。
+- 後台：`http://127.0.0.1:3001/admin`；上方「返回網站」回到前台。
+- 後台服務：`/admin#/services`；老師／排班：`/admin#/staff`；行事曆：`/admin#/calendar`。
+- `/admin` 讀取現有商家後台 HTML，僅在 React root 外加入導覽連結，保留上游 CSP 與禁止 iframe 的安全標頭。
+- 後台既有 `/assets/*`、`/logo.jpg` 與 `/api/*` 透過 Next rewrites 連至 STUDIO_ADMIN_URL。這些路徑保留給後台；前台 `/api/booking/*` 優先使用既有公開預約處理器。
+- 登入、refresh、登出 cookie 維持後端的 HttpOnly／SameSite 與 `/api/auth` path；沒有將登入 token 放入導覽網址。STUDIO_API_URL 與 STUDIO_ADMIN_URL 必須連到同一組 AndyStudio API／資料庫。
+- 既有忘記密碼信依後端 APP_URLS 開啟原本的後台（本機 8080）；本次未改全域寄信網址或密碼重設流程。
+
+### 建立手動驗收帳號
+
+僅限隔離本機 `studio_e2e_*` 環境，使用未存在的 `.env*.local` 檔名，準備程序會拒絕覆寫既有帳密檔。
+
+```bash
+STUDIO_TEST_REPO=/path/to/AndyStudio \
+STUDIO_TEST_COMPOSE_PROJECT=studio_e2e_example \
+STUDIO_TEST_CREDENTIALS_FILE=.env.acceptance.local \
+node scripts/prepare-live.mjs
+
+E2E_LIVE_FIXTURE=docs/live-fixture.local.json \
+E2E_ADMIN_CREDENTIALS=.env.acceptance.local \
+npm run test:e2e
+```
+
+帳密只保存 owner 的 E2E_OWNER_EMAIL／E2E_OWNER_PASSWORD，檔案權限 0600、不提交 Git，也不寫進 docs／Checkpoint。owner 與 platform 使用不同隨機密碼。手動驗收時把 `.env.local` 的 STUDIO_TENANT_SLUG 設成 fixture 裡的 slug，再執行 `npm run dev`；既有設定請先備份。這是驗收商家，不是正式品牌資料。
+
+驗收流程：前台 `/booking` 預約 → 保存管理碼 → 頁尾進入商家後台 → 用本機驗收帳號登入 → 行事曆選擇預約日期 → 開啟該筆預約並取消 → 返回網站 → `/booking/manage` 查詢「已取消」。另測重新整理後維持登入、登出後重新整理不再登入。後台資料由原 API 權限控管，新增 `/admin` 不會繞過登入。

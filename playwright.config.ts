@@ -12,6 +12,6 @@ export default defineConfig({
   webServer: {
     command: 'npm run dev -- --hostname 127.0.0.1',
     url: 'http://127.0.0.1:3001/booking', timeout: 120_000, reuseExistingServer: false,
-    env: { STUDIO_API_URL: fixture?.apiUrl ?? 'http://127.0.0.1:3000', STUDIO_TENANT_SLUG: fixture?.slug ?? 'wayee' },
+    env: { STUDIO_API_URL: fixture?.apiUrl ?? 'http://127.0.0.1:3000', STUDIO_TENANT_SLUG: fixture?.slug ?? 'wayee', STUDIO_ADMIN_URL: 'http://127.0.0.1:8080' },
   },
 });
