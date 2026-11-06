@@ -18,7 +18,7 @@ export default function AddToBag() {
         <Box component="output" aria-live="polite" sx={{ minWidth: 32, textAlign: 'center', fontSize: 15 }}>{qty}</Box>
         <ButtonBase aria-label="增加數量" onClick={() => setQty((q) => q + 1)} sx={stepSx}>+</ButtonBase>
       </Box>
-      <LineButton sx={{ flex: 1, minWidth: 200 }}>加入購物袋</LineButton>
+      <LineButton disabled sx={{ flex: 1, minWidth: 200 }}>線上購買尚未開放</LineButton>
     </Box>
   );
 }

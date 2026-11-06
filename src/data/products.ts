@@ -1,4 +1,4 @@
-export type Product = { id: string; name: string; category: string; price: string; note: string; deep?: boolean };
+export type Product = { id: string; name: string; category: string; price: string; note: string; images?: { url: string }[]; deep?: boolean };
 
 export const productCategories = ['全部', '[器物類別 一]', '[器物類別 二]', '[器物類別 三]'] as const;
 

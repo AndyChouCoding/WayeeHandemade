@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
@@ -5,14 +7,18 @@ import Typography from '@mui/material/Typography';
 import type { Metadata } from 'next';
 import JournalList from '@/components/journal/JournalList';
 import PageHeader from '@/components/PageHeader';
-import Placeholder from '@/components/Placeholder';
+import ContentImage from '@/components/ContentImage';
+import ContentMessage from '@/components/ContentMessage';
 import Wrap, { secPadding } from '@/components/Wrap';
-import { posts } from '@/data/posts';
+import { contentList } from '@/lib/content-server';
+import { postView } from '@/lib/content';
 import { fonts } from '@/theme/theme';
 
 export const metadata: Metadata = { title: '日誌' };
 
-export default function JournalPage() {
+export default async function JournalPage() {
+  const result = await contentList('posts');
+  const posts = result.data?.map(postView) ?? [];
   const [featured] = posts;
 
   return (
@@ -23,7 +29,7 @@ export default function JournalPage() {
 
       {/* Featured */}
       <Wrap component="section" sx={{ pt: { xs: '72px', sm: '104px' } }}>
-        <Link
+        {featured && <Link
           href={`/journal/${featured.slug}`}
           sx={{
             display: 'grid',
@@ -33,7 +39,7 @@ export default function JournalPage() {
             '&:hover .rt': { color: 'sky.accent' },
           }}
         >
-          <Placeholder label="文章照片" sx={{ aspectRatio: '16 / 10' }} />
+          <ContentImage url={featured.images[0]?.url} alt={featured.title} ratio="16 / 10" />
           <Stack sx={{ gap: 2.5 }}>
             <Box sx={{ display: 'flex', gap: 3, alignItems: 'baseline' }}>
               <Typography variant="idx">LATEST</Typography>
@@ -47,11 +53,11 @@ export default function JournalPage() {
               閱讀全文 <span aria-hidden="true">—</span>
             </Box>
           </Stack>
-        </Link>
+        </Link>}
       </Wrap>
 
       <Wrap component="section" aria-label="所有文章" sx={secPadding}>
-        <JournalList />
+        {posts.length ? <JournalList posts={posts} /> : <ContentMessage error={result.error} empty="目前沒有已發布文章。" />}
       </Wrap>
     </>
   );

@@ -3,11 +3,12 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { useState } from 'react';
-import { posts, postTags } from '@/data/posts';
+import type { Post } from '@/data/posts';
 import FilterTabs from '../FilterTabs';
 import PostRow from '../PostRow';
 
-export default function JournalList() {
+export default function JournalList({ posts }: { posts: Post[] }) {
+  const postTags = ['全部', ...new Set(posts.map((post) => post.tag).filter(Boolean))];
   const [tag, setTag] = useState<(typeof postTags)[number]>('全部');
   const list = tag === '全部' ? posts : posts.filter((p) => p.tag === tag);
 

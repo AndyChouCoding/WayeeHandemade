@@ -3,11 +3,12 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { productCategories, products } from '@/data/products';
+import type { Product } from '@/data/products';
 import FilterTabs from '../FilterTabs';
 import ProductCard from '../ProductCard';
 
-export default function ShopGrid() {
+export default function ShopGrid({ products }: { products: Product[] }) {
+  const productCategories = ['全部', ...new Set(products.map((product) => product.category).filter(Boolean))];
   const [category, setCategory] = useState<(typeof productCategories)[number]>('全部');
   const list = category === '全部' ? products : products.filter((p) => p.category === category);
 

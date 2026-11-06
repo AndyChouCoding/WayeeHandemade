@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -10,13 +12,17 @@ import ServiceCatalog from '@/components/booking/ServiceCatalog';
 import Split from '@/components/Split';
 import WorkCard from '@/components/WorkCard';
 import Wrap, { secPadding } from '@/components/Wrap';
-import { posts } from '@/data/posts';
-import { products } from '@/data/products';
+import { contentList } from '@/lib/content-server';
+import { postView, productView } from '@/lib/content';
+import ContentMessage from '@/components/ContentMessage';
 import { works } from '@/data/works';
 
 const sectionStack = { ...secPadding, display: 'flex', flexDirection: 'column' } as const;
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [postResult, productResult] = await Promise.all([contentList('posts'), contentList('products')]);
+  const posts = postResult.data?.map(postView) ?? [];
+  const products = productResult.data?.map(productView) ?? [];
   return (
     <>
       <Hero />
@@ -69,6 +75,7 @@ export default function HomePage() {
               gap: { xs: '28px 16px', sm: '40px 28px' },
             }}
           >
+            {!products.length && <ContentMessage error={productResult.error} empty="目前沒有上架商品。" />}
             {products.slice(0, 4).map((p) => (
               <ProductCard key={p.id} product={p} href={`/shop/${p.id}`} />
             ))}
@@ -99,6 +106,7 @@ export default function HomePage() {
       <Wrap component="section" sx={{ ...sectionStack, gap: 6 }}>
         <SectionHeading index="05 — JOURNAL" title="日誌" more={{ label: '所有文章', href: '/journal' }} />
         <Stack sx={{ borderBottom: 1, borderColor: 'sky.line' }}>
+          {!posts.length && <ContentMessage error={postResult.error} empty="目前沒有已發布文章。" />}
           {posts.slice(0, 3).map((post) => (
             <PostRow key={post.slug} post={post} />
           ))}

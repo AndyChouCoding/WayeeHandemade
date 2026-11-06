@@ -145,3 +145,18 @@ npm run test:e2e
 帳密只保存 owner 的 E2E_OWNER_EMAIL／E2E_OWNER_PASSWORD，檔案權限 0600、不提交 Git，也不寫進 docs／Checkpoint。owner 與 platform 使用不同隨機密碼。手動驗收時把 `.env.local` 的 STUDIO_TENANT_SLUG 設成 fixture 裡的 slug，再執行 `npm run dev`；既有設定請先備份。這是驗收商家，不是正式品牌資料。
 
 驗收流程：前台 `/booking` 預約 → 保存管理碼 → 頁尾進入商家後台 → 用本機驗收帳號登入 → 行事曆選擇預約日期 → 開啟該筆預約並取消 → 返回網站 → `/booking/manage` 查詢「已取消」。另測重新整理後維持登入、登出後重新整理不再登入。後台資料由原 API 權限控管，新增 `/admin` 不會繞過登入。
+
+
+## 商家管理文章與商品（CMS）
+
+日誌、器物與首頁的對應區塊現由 AndyStudio 公開內容 API 提供。商家可在 `/admin` 的「文章」「商品」新增內容、上傳圖片與儲存草稿，再由 admin／owner 發布。既有 `src/data/posts.ts`、`src/data/products.ts` 示範資料保留供歷史參考，這些頁面已不再讀取其陣列；上方早期靜態內容說明不適用於已串接的文章與商品。
+
+- 使用既有 `STUDIO_API_URL`、`STUDIO_TENANT_SLUG`、`STUDIO_ADMIN_URL`；API 需部署內容模組並啟用商家的 `storefront` 功能。
+- 網址採後台填寫的 slug：`/journal/{slug}`、`/shop/{slug}`。只顯示已發布資料；草稿、下架或不存在內容回應找不到頁面。修改 slug 不自動轉址。
+- 發布、修改與下架後重新載入即反映，不需每次重新部署；頁面為動態 SSR，資料請求不快取。
+- Markdown 支援以空行分隔的段落、`#`／`##`／`###` 標題、`- ` 清單、`**粗體**` 與 HTTP(S) 連結。HTML 顯示為文字，不執行；相對連結與其他 URL scheme 顯示為文字。
+- 商品價格沿用平台規則：TWD/JPY 整元、USD 分。商品目前為展示，購買按鈕明確顯示尚未開放，沒有購物車或金流。
+- 圖片須先由後台驗證；第一張為封面，其餘依排序顯示。API 回傳短效簽章 URL，重新載入會取得新的 URL。
+- 空清單、API 無法連線與不存在內容分別處理，不以示範資料掩蓋錯誤。預約與作品頁維持原有流程。
+
+驗證：`npm run lint`、`npm run typecheck`、`npm test`、`npm run build`。跨專案真實瀏覽器驗收由 AndyStudio `scripts/test-content-live.cjs` 啟動，見該專案 README；`E2E_PORT` 可覆寫 Playwright 測試 port，避免佔用現行 3001。`e2e/content-live.spec.ts` 涵蓋圖片、發布／下架、HTML 注入防護、角色與手機版及真實預約回歸。
