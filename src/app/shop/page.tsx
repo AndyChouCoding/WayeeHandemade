@@ -17,7 +17,7 @@ export default async function ShopPage() {
   return (
     <>
       <PageHeader index="SHOP" title="器物" en="objects for everyday">
-        <p style={{ margin: 0 }}>[小舖介紹：器物的用途、每件都是手作、數量不多]</p>
+        <p style={{ margin: 0 }}>一針一線、一筆一點完成的手作器物，每件都保留獨一無二的細節。</p>
       </PageHeader>
       <Wrap component="section" sx={secPadding}>
         {products.length ? <ShopGrid products={products} /> : <ContentMessage error={result.error} empty="目前沒有上架商品。" />}

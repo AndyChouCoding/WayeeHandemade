@@ -24,7 +24,7 @@ export default async function JournalPage() {
   return (
     <>
       <PageHeader index="JOURNAL" title="日誌" en="notes from a rainy desk">
-        <p style={{ margin: 0 }}>[日誌介紹：工作室的日常、作品背後的故事、市集與課程消息]</p>
+        <p style={{ margin: 0 }}>記錄工作室日常、作品背後的故事，以及每一次一起慢慢創作的時光。</p>
       </PageHeader>
 
       {/* Featured */}

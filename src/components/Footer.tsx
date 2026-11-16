@@ -61,7 +61,7 @@ export default function Footer() {
           <Stack sx={{ gap: '4px', fontSize: 14, letterSpacing: '.1em' }}>
             <Typography variant="idx" sx={{ mb: 1 }}>CONTACT</Typography>
             <Link href={site.instagram} sx={footLinkSx}>Instagram</Link>
-            <Link href={site.email} sx={footLinkSx}>Email</Link>
+            <Link href={site.line} sx={footLinkSx}>LINE</Link>
             <Box component="span" sx={{ ...footLinkSx, color: 'sky.muted' }}>{site.account}</Box>
           </Stack>
 
